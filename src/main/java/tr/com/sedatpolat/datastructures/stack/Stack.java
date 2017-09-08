@@ -44,4 +44,8 @@ public class Stack<E extends Comparable<E>> {
 		
 		return top.value;
 	}
+	
+	public boolean isEmpty() {
+		return top == null;
+	}
 }

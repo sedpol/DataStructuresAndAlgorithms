@@ -10,6 +10,9 @@ import java.util.Map;
 
 import javax.management.RuntimeOperationsException;
 
+import tr.com.sedatpolat.datastructures.queue.Queue;
+import tr.com.sedatpolat.datastructures.stack.Stack;
+
 /**
  * 
  * @author sedpol
@@ -26,11 +29,21 @@ public class GraphWithArray<E extends Comparable<E>> {
 	}
 	
 	public class Edge implements Comparable<Edge> {
+		private int id;
 		private int weight;
 		private E vertext;
-		public Edge(int weight, E vertext) {
+		public Edge(int id, int weight, E vertext) {
+			this.id = id;
 			this.weight = weight;
 			this.vertext = vertext;
+		}
+
+		public int getId() {
+			return id;
+		}
+
+		public void setId(int id) {
+			this.id = id;
 		}
 		
 		public int getWeight() {
@@ -60,6 +73,8 @@ public class GraphWithArray<E extends Comparable<E>> {
 	}
 	
 	private List<GraphWithArray<E>.Edge> adjacencyArr[];
+	private boolean visitedArr [];
+	
 	private TYPE type;
 	
 	private Map<Integer, Integer> idMap = new HashMap<Integer, Integer>(); //TODO should be used <String, Integer>
@@ -69,20 +84,21 @@ public class GraphWithArray<E extends Comparable<E>> {
 	@SuppressWarnings("unchecked")
 	public GraphWithArray(int size, TYPE type) {
 		adjacencyArr = new LinkedList [size];
+		visitedArr = new boolean [size];
 		this.type = type;
 	}
 	
-	public void add(int id, int weight, E vertext) {
+	public void add(int id, int neighbourId, int weight, E vertext) {
 
 		Integer currentIndex = getIndexById(id);
 		if (currentIndex == null) {
 			if (adjacencyArr[index] == null) 
 				adjacencyArr[index] = new LinkedList<GraphWithArray<E>.Edge>();
 			
-			add(index, new Edge(weight, vertext)); 
+			add(index, new Edge(neighbourId, weight, vertext)); 
 			idMap.put(index++, id);
 		} else {
-			add(currentIndex, new Edge(weight, vertext));
+			add(currentIndex, new Edge(neighbourId, weight, vertext));
 		}
 	}
 	
@@ -161,5 +177,116 @@ public class GraphWithArray<E extends Comparable<E>> {
 			}
 		}
 		return stringBuffer.toString();
+	}
+
+	private Queue<Integer> queue = null;
+	public String depthFirstSearch(Integer id) {
+		queue = new Queue<Integer>();
+
+		Integer index = getIndexById(id);
+		
+		if (index == null)
+			return "";
+		
+		StringBuffer stringBuffer = new StringBuffer();
+		
+		for (int i = 0; i < visitedArr.length; i++) 
+			visitedArr[i] = false;
+		
+		
+		visitedArr [index] = true;
+		
+		addFirstIntoBuffer(index, stringBuffer);
+		
+		dfs(index, stringBuffer);
+		
+		return stringBuffer.toString();
+	}
+	
+	private void dfs(Integer index, StringBuffer stringBuffer) {
+		if (!isVisited(index)) {
+			addBuffer(visit(index), stringBuffer);
+			queue.enqueue(index);
+		}
+		
+		List<GraphWithArray<E>.Edge> list = adjacencyArr[index];
+		if (list != null) {
+			for (Edge edge : list) {
+				int neighbourIndex = getIndexById(edge.id);
+				if (!isVisited(neighbourIndex)) {
+					addBuffer(visit(neighbourIndex), stringBuffer);
+					queue.enqueue(neighbourIndex);
+				}
+			}
+		}
+		if (!queue.isEmpty()) {
+			dfs(queue.dequeue().value, stringBuffer);
+		}
+	}
+
+	Stack<Integer> stack = null;
+	public String beadthFirstSearch(int id) {
+		stack = new Stack<Integer>();
+		
+		Integer index = getIndexById(id);
+		if (index == null)
+			return "";
+		
+		for (int i = 0; i < visitedArr.length; i++) 
+			visitedArr[i] = false;
+
+		StringBuffer stringBuffer = new StringBuffer();
+
+		bfs(index, stringBuffer);
+		
+		String resultStr = stringBuffer.toString();
+		
+		if (resultStr.length() < 2)
+			return resultStr;
+		
+		return resultStr.substring(2); // remove leading ("->") trick
+	}
+	
+	private void bfs(Integer index, StringBuffer stringBuffer) {
+		
+		if (!isVisited(index)) {
+			Integer nextIndex = visit(index);
+			
+			stack.push(nextIndex);
+			addBuffer(nextIndex, stringBuffer);
+			
+			List<GraphWithArray<E>.Edge> list = adjacencyArr [nextIndex];
+			if (list != null) {
+				for (GraphWithArray<E>.Edge edge : list) {
+					
+					Integer tempIndex = getIndexById(edge.id);
+					if (!isVisited(tempIndex))
+						bfs(tempIndex, stringBuffer);
+				}
+			}
+		} else {
+			if (!stack.isEmpty())
+				bfs(stack.pop(), stringBuffer);
+		}
+	}
+	
+	private boolean isVisited(int index) {
+		return visitedArr[index];
+	}
+	
+	private Integer visit (int index) {
+		if (isVisited(index))
+			throw new RuntimeException(idMap.get(index) + " is already visited!");
+		
+		visitedArr[index] = true;
+		return index;
+	}
+
+	private void addBuffer(int index, StringBuffer stringBuffer) {
+		stringBuffer.append("->" + idMap.get(index));
+	}
+	
+	private void addFirstIntoBuffer(int index, StringBuffer stringBuffer) {
+		stringBuffer.append(idMap.get(index));
 	}
 }

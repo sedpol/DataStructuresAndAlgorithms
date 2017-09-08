@@ -22,26 +22,26 @@ public class GraphWithArrayWeightOrderedTest {
 		
 		graph = new GraphWithArray<Movie>(10, GraphWithArray.TYPE.WEIGHT_ORDERED);
 		//MOVIE A->B->D
-		graph.add(1000, 7000, new Movie(2000, "B", 7.6));
-		graph.add(1000, 7500, new Movie(2500, "D", 8.9));
+		graph.add(1000, 2000, 7000, new Movie(2000, "B", 7.6));
+		graph.add(1000, 2500, 7500, new Movie(2500, "D", 8.9));
 		
 		//MOVIE B->C
-		graph.add(2000, 5500, new Movie(5000, "C", 7.7));
+		graph.add(2000, 5000, 5500, new Movie(5000, "C", 7.7));
 		
 		//MOVIE C->A->E
-		graph.add(5000, 1300, new Movie(7000, "E", 7.8));
-		graph.add(5000, 1500, new Movie(1000, "A", 8.1));
+		graph.add(5000, 7000, 1300, new Movie(7000, "E", 7.8));
+		graph.add(5000, 1000, 1500, new Movie(1000, "A", 8.1));
 
 		//MOVIE D->A->E->F
-		graph.add(2500, 4100, new Movie(1000, "A", 8.1));
-		graph.add(2500, 3700, new Movie(7000, "E", 7.8));
-		graph.add(2500, 3700, new Movie(8000, "F", 8.0));
+		graph.add(2500, 1000, 4100, new Movie(1000, "A", 8.1));
+		graph.add(2500, 7000, 3700, new Movie(7000, "E", 7.8));
+		graph.add(2500, 8000, 3700, new Movie(8000, "F", 8.0));
 
 		//MOVIE E->D
-		graph.add(7000, 2500, new Movie(2500, "D", 8.9));
+		graph.add(7000, 2500, 2500, new Movie(2500, "D", 8.9));
 
 		//MOVIE F->D
-		graph.add(8000, 3000, new Movie(2500, "D", 8.9));
+		graph.add(8000, 2500, 3000, new Movie(2500, "D", 8.9));
 	}
 	
 	@Test

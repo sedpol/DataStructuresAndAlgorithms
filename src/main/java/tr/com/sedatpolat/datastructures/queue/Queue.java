@@ -58,4 +58,8 @@ public class Queue<E extends Comparable<E>> {
 		
 		return rear.value;
 	}
+	
+	public boolean isEmpty() {
+		return front == null;
+	}
 }

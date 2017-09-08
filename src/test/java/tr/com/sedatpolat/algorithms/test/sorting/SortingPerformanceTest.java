@@ -73,13 +73,13 @@ public class SortingPerformanceTest {
 
 	@Test
 	public void testSelectionSort() {
-		Integer[] result = Arrays.copyOf(array, array.length);
+		Integer[] tempArr = Arrays.copyOf(array, array.length);
 
 		long time = System.currentTimeMillis();
-		SelectionSort<Integer> selectionSort = new SelectionSort<>();
-		selectionSort.sort(result);
+		SelectionSort<Integer> selectionSort = new SelectionSort<Integer>();
+		selectionSort.sort(tempArr);
 		System.out.println("SelectionSort in ms: " + (System.currentTimeMillis() - time));
 
-		assertArrayEquals(sortedArr, result);
+		assertArrayEquals(sortedArr, tempArr);
 	}
 }
