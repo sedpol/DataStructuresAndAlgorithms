@@ -1,4 +1,4 @@
-package tr.com.sedatpolat.algorithms.test.graptraversal;
+package tr.com.sedatpolat.algorithms.test.graphtraversal;
 
 import static org.junit.Assert.assertEquals;
 
