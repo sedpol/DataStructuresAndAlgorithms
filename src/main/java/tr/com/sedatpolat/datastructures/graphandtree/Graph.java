@@ -36,16 +36,8 @@ public class Graph<E extends Comparable<E>> {
 			return weight;
 		}
 
-		public void setWeight(int weight) {
-			this.weight = weight;
-		}
-
 		public E getVertext() {
 			return vertext;
-		}
-
-		public void setVertext(E vertext) {
-			this.vertext = vertext;
 		}
 
 		@Override
@@ -60,7 +52,7 @@ public class Graph<E extends Comparable<E>> {
 	
 	private TYPE type;
 	
-	private Map<E, List<Graph<E>.Edge>> adjacencyMap = new HashMap<E, List<Graph<E>.Edge>>(); //TODO better to be used <String, List<Graph<E>.Edge>>
+	private Map<E, List<Graph<E>.Edge>> adjacencyMap = new HashMap<E, List<Graph<E>.Edge>>();
 
 	public Graph(TYPE type) {
 		this.type = type;

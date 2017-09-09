@@ -40,16 +40,8 @@ public class GraphWithArray<E extends Comparable<E>> {
 			return weight;
 		}
 
-		public void setWeight(int weight) {
-			this.weight = weight;
-		}
-
 		public E getVertext() {
 			return vertext;
-		}
-
-		public void setVertext(E vertext) {
-			this.vertext = vertext;
 		}
 
 		@Override
