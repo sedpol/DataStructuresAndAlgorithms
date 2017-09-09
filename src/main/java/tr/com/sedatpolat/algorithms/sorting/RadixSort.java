@@ -52,7 +52,7 @@ public class RadixSort {
 			list = graph.getAdjacencyList(i);
 			if (list != null)
 				for (Graph<Integer>.Edge edge : list)
-					arr [index++] = edge.vertext;
+					arr [index++] = edge.getVertext();
 		}
 		initGraph();
 	}

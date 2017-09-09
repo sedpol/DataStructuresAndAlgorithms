@@ -25,14 +25,29 @@ public class Graph<E extends Comparable<E>> {
 	}
 	
 	public class Edge implements Comparable<Edge> {
-		public int weight;
-		public E vertext;
-		
+		private int weight;
+		private E vertext;
 		public Edge(int weight, E vertext) {
 			this.weight = weight;
 			this.vertext = vertext;
 		}
-		
+
+		public int getWeight() {
+			return weight;
+		}
+
+		public void setWeight(int weight) {
+			this.weight = weight;
+		}
+
+		public E getVertext() {
+			return vertext;
+		}
+
+		public void setVertext(E vertext) {
+			this.vertext = vertext;
+		}
+
 		@Override
 		public String toString() {
 			return "(" + "Weight: " + weight + ", " + vertext.toString() + ")";
@@ -45,18 +60,18 @@ public class Graph<E extends Comparable<E>> {
 	
 	private TYPE type;
 	
-	private Map<Integer, List<Graph<E>.Edge>> adjacencyMap = new HashMap<Integer, List<Graph<E>.Edge>>(); //TODO better to be used <String, List<Graph<E>.Edge>>
+	private Map<E, List<Graph<E>.Edge>> adjacencyMap = new HashMap<E, List<Graph<E>.Edge>>(); //TODO better to be used <String, List<Graph<E>.Edge>>
 
 	public Graph(TYPE type) {
 		this.type = type;
 	}
 	
-	public void add(int id, int weight, E vertext) {
-		List<Graph<E>.Edge> edgeList = adjacencyMap.get(id);
+	public void add(E e, int weight, E vertext) {
+		List<Graph<E>.Edge> edgeList = adjacencyMap.get(e);
 		
 		if (edgeList == null) {
 			edgeList = new LinkedList<Graph<E>.Edge>();
-			adjacencyMap.put(id, edgeList);
+			adjacencyMap.put(e, edgeList);
 			add(edgeList, new Edge(weight, vertext)); 
 		} else {
 			add(edgeList, new Edge(weight, vertext));
@@ -79,12 +94,12 @@ public class Graph<E extends Comparable<E>> {
 		}
 	}
 	
-	public List<Graph<E>.Edge> getAdjacencyList(int id) {
-		return adjacencyMap.get(id);
+	public List<Graph<E>.Edge> getAdjacencyList(E e) {
+		return adjacencyMap.get(e);
 	}
 	
-	public List<Graph<E>.Edge> suggestion(int id) {
-		List<Graph<E>.Edge>  suggestedList = getAdjacencyList(id);
+	public List<Graph<E>.Edge> suggestion(E e) {
+		List<Graph<E>.Edge>  suggestedList = getAdjacencyList(e);
 		
 		if (suggestedList == null)	
 			throw new RuntimeOperationsException(new RuntimeException(), "ID could not found!");
@@ -105,18 +120,18 @@ public class Graph<E extends Comparable<E>> {
 	public String toString() {
 		StringBuffer stringBuffer = new StringBuffer();
 		
-		Set<Integer> adjacencyList = adjacencyMap.keySet();
-		Iterator<Integer> iterator = adjacencyList.iterator();
+		Set<E> adjacencyList = adjacencyMap.keySet();
+		Iterator<E> iterator = adjacencyList.iterator();
 		
 		List<Edge> list = null;
-		int id = 0;
+		E e = null;
 		
 		while (iterator.hasNext()) {
-			id = iterator.next();
-			list = adjacencyMap.get(id);
+			e = iterator.next();
+			list = adjacencyMap.get(e);
 			
 			if (list != null) {
-				stringBuffer.append("ID: " + id + "-->");
+				stringBuffer.append("E: " + e + "-->");
 				
 				for (Edge edge : list) {
 					stringBuffer.append(edge.toString());

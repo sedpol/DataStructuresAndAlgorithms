@@ -29,23 +29,13 @@ public class GraphWithArray<E extends Comparable<E>> {
 	}
 	
 	public class Edge implements Comparable<Edge> {
-		private int id;
 		private int weight;
 		private E vertext;
-		public Edge(int id, int weight, E vertext) {
-			this.id = id;
+		public Edge(int weight, E vertext) {
 			this.weight = weight;
 			this.vertext = vertext;
 		}
 
-		public int getId() {
-			return id;
-		}
-
-		public void setId(int id) {
-			this.id = id;
-		}
-		
 		public int getWeight() {
 			return weight;
 		}
@@ -77,7 +67,7 @@ public class GraphWithArray<E extends Comparable<E>> {
 	
 	private TYPE type;
 	
-	private Map<Integer, Integer> idMap = new HashMap<Integer, Integer>(); //TODO should be used <String, Integer>
+	private Map<Integer, E> idMap = new HashMap<Integer, E>(); //TODO should be used <String, Integer>
 
 	private int index = 0;
 
@@ -88,17 +78,17 @@ public class GraphWithArray<E extends Comparable<E>> {
 		this.type = type;
 	}
 	
-	public void add(int id, int neighbourId, int weight, E vertext) {
+	public void add(E current, int weight, E vertext) {
 
-		Integer currentIndex = getIndexById(id);
+		Integer currentIndex = getIndex(current);
 		if (currentIndex == null) {
 			if (adjacencyArr[index] == null) 
 				adjacencyArr[index] = new LinkedList<GraphWithArray<E>.Edge>();
 			
-			add(index, new Edge(neighbourId, weight, vertext)); 
-			idMap.put(index++, id);
+			add(index, new Edge(weight, vertext)); 
+			idMap.put(index++, current);
 		} else {
-			add(currentIndex, new Edge(neighbourId, weight, vertext));
+			add(currentIndex, new Edge(weight, vertext));
 		}
 	}
 	
@@ -118,8 +108,8 @@ public class GraphWithArray<E extends Comparable<E>> {
 		}
 	}
 	
-	public List<GraphWithArray<E>.Edge> getAdjacencyList(int id) {
-		Integer currentIndex = getIndexById(id);
+	public List<GraphWithArray<E>.Edge> getAdjacencyList(E e) {
+		Integer currentIndex = getIndex(e);
 		if (currentIndex == null)	
 			return  new ArrayList<GraphWithArray<E>.Edge>();
 //			throw new RuntimeOperationsException(new RuntimeException(), "There is no Node reletaed with ID: " + id + "!");
@@ -129,12 +119,12 @@ public class GraphWithArray<E extends Comparable<E>> {
 		return suggestedList;
 	}
 	
-	public List<GraphWithArray<E>.Edge> suggestion(int id) {
+	public List<GraphWithArray<E>.Edge> suggestion(E e) {
 		List<GraphWithArray<E>.Edge>  suggestedList = null;
 		
-		Integer currentIndex = getIndexById(id);
+		Integer currentIndex = getIndex(e);
 		if (currentIndex == null)	
-			throw new RuntimeOperationsException(new RuntimeException(), "There is no Node reletaed with ID: " + id + "!");
+			throw new RuntimeOperationsException(new RuntimeException(), "There is no Node reletaed with ID: " + e.toString() + "!");
 
 		suggestedList = new ArrayList<GraphWithArray<E>.Edge>();// protect for modification
 		
@@ -148,11 +138,15 @@ public class GraphWithArray<E extends Comparable<E>> {
 		return suggestedList;
 	}
 	
-	private Integer getIndexById(Integer id) {
+	private Integer getIndex(E e) {
 		Collection<Integer> graphIndexList = idMap.keySet();
+		
+		if(graphIndexList == null)
+			return null;
+		
 		for (Integer indexTemp : graphIndexList) {
-			Integer idTemp = idMap.get(indexTemp);
-			if (id.equals(idTemp))
+			E temp = idMap.get(indexTemp);
+			if (e.equals(temp))
 				return indexTemp;
 		}
 		return null;
@@ -180,10 +174,10 @@ public class GraphWithArray<E extends Comparable<E>> {
 	}
 
 	private Queue<Integer> queue = null;
-	public String depthFirstSearch(Integer id) {
+	public String depthFirstSearch(E e) {
 		queue = new Queue<Integer>();
 
-		Integer index = getIndexById(id);
+		Integer index = getIndex(e);
 		
 		if (index == null)
 			return "";
@@ -212,7 +206,7 @@ public class GraphWithArray<E extends Comparable<E>> {
 		List<GraphWithArray<E>.Edge> list = adjacencyArr[index];
 		if (list != null) {
 			for (Edge edge : list) {
-				int neighbourIndex = getIndexById(edge.id);
+				int neighbourIndex = getIndex(edge.vertext);
 				if (!isVisited(neighbourIndex)) {
 					addBuffer(visit(neighbourIndex), stringBuffer);
 					queue.enqueue(neighbourIndex);
@@ -225,10 +219,10 @@ public class GraphWithArray<E extends Comparable<E>> {
 	}
 
 	Stack<Integer> stack = null;
-	public String beadthFirstSearch(int id) {
+	public String beadthFirstSearch(E e) {
 		stack = new Stack<Integer>();
 		
-		Integer index = getIndexById(id);
+		Integer index = getIndex(e);
 		if (index == null)
 			return "";
 		
@@ -259,7 +253,7 @@ public class GraphWithArray<E extends Comparable<E>> {
 			if (list != null) {
 				for (GraphWithArray<E>.Edge edge : list) {
 					
-					Integer tempIndex = getIndexById(edge.id);
+					Integer tempIndex = getIndex(edge.vertext);
 					if (!isVisited(tempIndex))
 						bfs(tempIndex, stringBuffer);
 				}

@@ -11,7 +11,6 @@ import org.junit.Test;
 import tr.com.sedatpolat.algorithms.sorting.MergeSort;
 import tr.com.sedatpolat.algorithms.sorting.QuickSort;
 import tr.com.sedatpolat.algorithms.sorting.RadixSort;
-import tr.com.sedatpolat.algorithms.sorting.SelectionSort;
 
 public class SortingPerformanceTest {
 	private static Integer[] array = null;
@@ -19,7 +18,7 @@ public class SortingPerformanceTest {
 	@BeforeClass
 	public static void init() {
 
-		int SIZE = 90000;
+		int SIZE = 500000;
 		final int size = SIZE;
 		array = new Integer[size];
 
@@ -71,6 +70,7 @@ public class SortingPerformanceTest {
 		assertArrayEquals(sortedArr, tempArr);
 	}
 
+	/* can not run in over 50K array
 	@Test
 	public void testSelectionSort() {
 		Integer[] tempArr = Arrays.copyOf(array, array.length);
@@ -82,4 +82,5 @@ public class SortingPerformanceTest {
 
 		assertArrayEquals(sortedArr, tempArr);
 	}
+	*/
 }

@@ -1,12 +1,11 @@
 package tr.com.sedatpolat.datastructures.test.graphandtree;
 
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
 import org.junit.Test;
 
 import tr.com.sedatpolat.datastructures.graphandtree.GraphWithArray;
-
-import static org.junit.Assert.*;
-
-import org.junit.Before;
 
 /**
  * 
@@ -16,61 +15,68 @@ import org.junit.Before;
 public class GraphWithArrayWeightOrderedTest {
 	
 	public GraphWithArray<Movie> graph = null;
+
+	private Movie A = new Movie(1000, "A", 8.1);
+	private Movie B = new Movie(2000, "B", 7.6);
+	private Movie C = new Movie(5000, "C", 7.7);
+	private Movie D = new Movie(2500, "D", 8.9);
+	private Movie E = new Movie(7000, "E", 7.8);
+	private Movie F = new Movie(8000, "F", 8.0);
 	
 	@Before
 	public void initGraph() {
 		
 		graph = new GraphWithArray<Movie>(10, GraphWithArray.TYPE.WEIGHT_ORDERED);
 		//MOVIE A->B->D
-		graph.add(1000, 2000, 7000, new Movie(2000, "B", 7.6));
-		graph.add(1000, 2500, 7500, new Movie(2500, "D", 8.9));
+		graph.add(A, 7000, B);
+		graph.add(A, 7500, D);
 		
 		//MOVIE B->C
-		graph.add(2000, 5000, 5500, new Movie(5000, "C", 7.7));
+		graph.add(B, 5500, C);
 		
 		//MOVIE C->A->E
-		graph.add(5000, 7000, 1300, new Movie(7000, "E", 7.8));
-		graph.add(5000, 1000, 1500, new Movie(1000, "A", 8.1));
+		graph.add(C, 1300, E);
+		graph.add(C, 1500, A);
 
 		//MOVIE D->A->E->F
-		graph.add(2500, 1000, 4100, new Movie(1000, "A", 8.1));
-		graph.add(2500, 7000, 3700, new Movie(7000, "E", 7.8));
-		graph.add(2500, 8000, 3700, new Movie(8000, "F", 8.0));
+		graph.add(D, 4100, A);
+		graph.add(D, 3700, E);
+		graph.add(D, 3700, F);
 
 		//MOVIE E->D
-		graph.add(7000, 2500, 2500, new Movie(2500, "D", 8.9));
+		graph.add(E, 2500, D);
 
 		//MOVIE F->D
-		graph.add(8000, 2500, 3000, new Movie(2500, "D", 8.9));
+		graph.add(F, 3000, D);
 	}
 	
 	@Test
 	public void testAdjecency() {
 		
 		//A: 1000 neighbor is 2500 D;
-		assertEquals(2500, graph.getAdjacencyList(1000).get(0).getVertext().getId());
+		assertEquals(D, graph.getAdjacencyList(A).get(0).getVertext());
 		//A: 1000 neighbor is 2000 B;
-		assertEquals(2000, graph.getAdjacencyList(1000).get(1).getVertext().getId());
+		assertEquals(B, graph.getAdjacencyList(A).get(1).getVertext());
 		
 		//F: 8000 neighbor is 2500 D;
-		assertEquals(2500, graph.getAdjacencyList(8000).get(0).getVertext().getId());
+		assertEquals(D, graph.getAdjacencyList(F).get(0).getVertext());
 	}
 	
 	@Test
 	public void testSuggestion() {
 		//D->4100->A  should suggest firstly A for movie D
-		assertEquals(1000, graph.suggestion(2500).get(0).getVertext().getId());
+		assertEquals(A, graph.suggestion(D).get(0).getVertext());
 		
 		//MOVIE B->5500->C; should suggest firstly C for movie B
-		assertEquals(5000, graph.suggestion(2000).get(0).getVertext().getId());
+		assertEquals(C, graph.suggestion(B).get(0).getVertext());
 		
 		//MOVIE F->3000->D; should suggest firstly D for movie F
-		assertEquals(2500, graph.suggestion(8000).get(0).getVertext().getId());
+		assertEquals(D, graph.suggestion(F).get(0).getVertext());
 	}
 	
 	@Test(expected=RuntimeException.class)
 	public void testSuggestionExceptionalCase() {
-		graph.suggestion(1);
+		graph.suggestion(new Movie(50, "X", 0.0));
 	}
 	
 //	@Test(expected=RuntimeException.class)

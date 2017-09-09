@@ -15,15 +15,6 @@ import tr.com.sedatpolat.datastructures.graphandtree.GraphWithArray;
 public class BreadthFirstSearchTest {
 
 	public GraphWithArray<String> graph = null;
-
-	int A = 1000;
-	int B = 2000;
-	int C = 3000;
-	int D = 4000;
-	int E = 5000;
-	int F = 6000;
-	int G = 7000;
-	int H = 8000;
 	
 	/*
 	  ----------------
@@ -39,31 +30,30 @@ public class BreadthFirstSearchTest {
 	public void initGraph() {
 
 		graph = new GraphWithArray<String>(10, GraphWithArray.TYPE.NONE);
-		graph.add(A, B, 0, "B");
-		graph.add(A, D, 0, "D");
+		graph.add("A", 0, "B");
+		graph.add("A", 0, "D");
 
-		graph.add(B, C, 0, "C");
+		graph.add("B", 0, "C");
 
-		graph.add(C, E, 0, "E");
-		graph.add(C, A, 0, "A");
+		graph.add("C", 0, "E");
+		graph.add("C", 0, "A");
 
-		graph.add(D, A, 0, "A");
-		graph.add(D, E, 0, "E");
-		graph.add(D, F, 0, "F");
+		graph.add("D", 0, "A");
+		graph.add("D", 0, "E");
+		graph.add("D", 0, "F");
 
-		graph.add(E, D, 0, "D");
+		graph.add("E", 0, "D");
 
-		graph.add(F, D, 0, "D");
+		graph.add("F", 0, "D");
 	}
 
 	@Test
 	public void testBeadthFirstSearch() {
-		System.out.println(graph.beadthFirstSearch(1000));
-		assertEquals("1000->2000->3000->5000->4000->6000", graph.beadthFirstSearch(1000));
+		System.out.println(graph.beadthFirstSearch("A"));
+		assertEquals("A->B->C->E->D->F", graph.beadthFirstSearch("A"));
 	}
 	
 	/*
-	 * A: 1000, B: 2000, C: 3000, D: 4000, E:5000, F:6000, G:7000, H:8000
 	  ----------------
 	  |	   	  	  H	  |
 	  |	  		  |	  |
@@ -77,33 +67,33 @@ public class BreadthFirstSearchTest {
 	public void testBeadthFirstSearch2() {
 		GraphWithArray<String> graph = new GraphWithArray<String>(10, GraphWithArray.TYPE.NONE);
 
-		graph.add(A, B, 0, "B"); 
-		graph.add(A, D, 0, "D"); 
-		graph.add(A, G, 0, "G"); 
+		graph.add("A", 0, "B"); 
+		graph.add("A", 0, "D"); 
+		graph.add("A", 0, "G"); 
 		
-		graph.add(B, A, 0, "A"); 
-		graph.add(B, E, 0, "E"); 
-		graph.add(B, F, 0, "F"); 
+		graph.add("B", 0, "A"); 
+		graph.add("B", 0, "E"); 
+		graph.add("B", 0, "F"); 
 
-		graph.add(C, F, 0, "F"); 
-		graph.add(C, H, 0, "H"); 
+		graph.add("C", 0, "F"); 
+		graph.add("C", 0, "H"); 
 
-		graph.add(D, A, 0, "A"); 
-		graph.add(D, F, 0, "F"); 
+		graph.add("D", 0, "A"); 
+		graph.add("D", 0, "F"); 
 
-		graph.add(E, B, 0, "B"); 
-		graph.add(E, G, 0, "G");
+		graph.add("E", 0, "B"); 
+		graph.add("E", 0, "G");
 		
-		graph.add(F, B, 0, "B"); 
-		graph.add(F, C, 0, "C"); 
-		graph.add(F, D, 0, "D"); 
+		graph.add("F", 0, "B"); 
+		graph.add("F", 0, "C"); 
+		graph.add("F", 0, "D"); 
 
-		graph.add(G, A, 0, "A");
-		graph.add(G, E, 0, "E");
+		graph.add("G", 0, "A");
+		graph.add("G", 0, "E");
 		
-		graph.add(H, C, 0, "C");
+		graph.add("H", 0, "C");
 		
-		System.out.println(graph.beadthFirstSearch(A));
-		assertEquals("1000->2000->5000->7000->6000->3000->8000->4000", graph.beadthFirstSearch(A));
+		System.out.println(graph.beadthFirstSearch("A"));
+		assertEquals("A->B->E->G->F->C->H->D", graph.beadthFirstSearch("A"));
 	}
 }
